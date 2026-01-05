@@ -1,0 +1,47 @@
+{
+    "actions": {
+        "NETWORK_LATENCY": {
+            "actionId": "aws:eks:pod-network-latency",
+            "description": "causes network latency on cluster",
+            "parameters": {
+                "duration": "PT5M",
+                "kubernetesServiceAccount": "fis-sa"
+            },
+            "targets": {
+                "Pods": "EksPodDeleteTarget"
+            }
+        }
+    },
+    "description": "Apply network pressure to our cluster.",
+    "experimentOptions": {
+        "accountTargeting": "single-account",
+        "emptyTargetResolutionMode": "fail"
+    },
+    "logConfiguration": {
+        "cloudWatchLogsConfiguration": {
+            "logGroupArn": "<log group arn>"
+        },
+        "logSchemaVersion": 2
+    },
+    "roleArn": "<fis trust policy>",
+    "stopConditions": [
+        {
+            "source": "none"
+        }
+    ],
+    "tags": {
+        "Name": "EKS Stress: Network Latency"
+    },
+    "targets": {
+        "EksPodDeleteTarget": {
+            "parameters": {
+                "clusterIdentifier": "<eks cluster identifier>",
+                "namespace": "api",
+                "selectorType": "labelSelector",
+                "selectorValue": "app=k8s-api"
+            },
+            "resourceType": "aws:eks:pod",
+            "selectionMode": "ALL"
+        }
+    }
+}

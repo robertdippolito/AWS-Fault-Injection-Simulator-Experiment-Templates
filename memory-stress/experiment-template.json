@@ -1,0 +1,48 @@
+{
+    "actions": {
+        "MEMORY_STRESS": {
+            "actionId": "aws:eks:pod-memory-stress",
+            "description": "Memory stress on pods",
+            "parameters": {
+                "duration": "PT5M",
+                "kubernetesServiceAccount": "fis-sa"
+            },
+            "startAfter": [],
+            "targets": {
+                "Pods": "EksPodDeleteTarget"
+            }
+        }
+    },
+    "description": "Apply memory stress to our cluster.",
+    "experimentOptions": {
+        "accountTargeting": "single-account",
+        "emptyTargetResolutionMode": "skip"
+    },
+    "logConfiguration": {
+        "cloudWatchLogsConfiguration": {
+            "logGroupArn": "<log group arn>"
+        },
+        "logSchemaVersion": 2
+    },
+    "roleArn": "<fis trust policy>",
+    "stopConditions": [
+        {
+            "source": "none"
+        }
+    ],
+    "tags": {
+        "Name": "EKS Stress: Memory Stress"
+    },
+    "targets": {
+        "EksPodDeleteTarget": {
+            "parameters": {
+                "clusterIdentifier": "<cluster identifier>",
+                "namespace": "api",
+                "selectorType": "labelSelector",
+                "selectorValue": "app=k8s-api"
+            },
+            "resourceType": "aws:eks:pod",
+            "selectionMode": "ALL"
+        }
+    }
+}

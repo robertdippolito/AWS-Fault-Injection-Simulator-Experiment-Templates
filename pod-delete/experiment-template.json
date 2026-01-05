@@ -1,0 +1,46 @@
+{
+    "actions": {
+        "EksPodDelete": {
+            "actionId": "aws:eks:pod-delete",
+            "parameters": {
+                "kubernetesServiceAccount": "fis-sa"
+            },
+            "startAfter": [],
+            "targets": {
+                "Pods": "EksPodDeleteTarget"
+            }
+        }
+    },
+    "description": "Delete one or more EKS pods, targeting based on cluster and application label",
+    "experimentOptions": {
+        "accountTargeting": "single-account",
+        "emptyTargetResolutionMode": "fail"
+    },
+    "logConfiguration": {
+        "cloudWatchLogsConfiguration": {
+            "logGroupArn": "<log group arn>"
+        },
+        "logSchemaVersion": 2
+    },
+    "roleArn": "<fis trust policy>",
+    "stopConditions": [
+        {
+            "source": "none"
+        }
+    ],
+    "tags": {
+        "Name": "EKS Stress: Pod Delete"
+    },
+    "targets": {
+        "EksPodDeleteTarget": {
+            "parameters": {
+                "clusterIdentifier": "<cluster identifier>",
+                "namespace": "api",
+                "selectorType": "labelSelector",
+                "selectorValue": "app=k8s-api"
+            },
+            "resourceType": "aws:eks:pod",
+            "selectionMode": "ALL"
+        }
+    }
+}

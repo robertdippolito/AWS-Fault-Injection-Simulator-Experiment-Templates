@@ -1,0 +1,49 @@
+{
+    "actions": {
+        "NETWORK_BLACKHOLE": {
+            "actionId": "aws:eks:pod-network-blackhole-port",
+            "description": "drops traffic for specific ingoing/outgoing to MongoDB",
+            "parameters": {
+                "duration": "PT3M",
+                "kubernetesServiceAccount": "fis-sa",
+                "port": "27017",
+                "protocol": "tcp"
+            },
+            "targets": {
+                "Pods": "EksPodDeleteTarget"
+            }
+        }
+    },
+    "description": "Apply network blackholes to commonly used ports.",
+    "experimentOptions": {
+        "accountTargeting": "single-account",
+        "emptyTargetResolutionMode": "skip"
+    },
+    "logConfiguration": {
+        "cloudWatchLogsConfiguration": {
+            "logGroupArn": "<log group arn>"
+        },
+        "logSchemaVersion": 2
+    },
+    "roleArn": "<fis trust policy>",
+    "stopConditions": [
+        {
+            "source": "none"
+        }
+    ],
+    "tags": {
+        "Name": "EKS Stress: Network Blackhole"
+    },
+    "targets": {
+        "EksPodDeleteTarget": {
+            "parameters": {
+                "clusterIdentifier": "<cluster identifier>",
+                "namespace": "api",
+                "selectorType": "labelSelector",
+                "selectorValue": "app=k8s-api"
+            },
+            "resourceType": "aws:eks:pod",
+            "selectionMode": "ALL"
+        }
+    }
+}

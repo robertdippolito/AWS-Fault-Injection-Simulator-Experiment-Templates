@@ -1,0 +1,48 @@
+{
+    "actions": {
+        "CPU_STRESS": {
+            "actionId": "aws:eks:pod-cpu-stress",
+            "description": "Stress the Pods ",
+            "parameters": {
+                "duration": "PT5M",
+                "kubernetesServiceAccount": "fis-sa"
+            },
+            "startAfter": [],
+            "targets": {
+                "Pods": "EksPodDeleteTarget"
+            }
+        }
+    },
+    "description": "Apply CPU pressure to our cluster",
+    "experimentOptions": {
+        "accountTargeting": "single-account",
+        "emptyTargetResolutionMode": "fail"
+    },
+    "logConfiguration": {
+        "cloudWatchLogsConfiguration": {
+            "logGroupArn": "<log group arn>"
+        },
+        "logSchemaVersion": 2
+    },
+    "roleArn": "<fis trust policy>",
+    "stopConditions": [
+        {
+            "source": "none"
+        }
+    ],
+    "tags": {
+        "Name": "EKS Stress: CPU Stress"
+    },
+    "targets": {
+        "EksPodDeleteTarget": {
+            "parameters": {
+                "clusterIdentifier": "<eks cluster reference>",
+                "namespace": "api",
+                "selectorType": "labelSelector",
+                "selectorValue": "app=k8s-api"
+            },
+            "resourceType": "aws:eks:pod",
+            "selectionMode": "ALL"
+        }
+    }
+}
